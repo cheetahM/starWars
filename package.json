@@ -18,5 +18,9 @@
   "homepage": "https://github.com/cheetahM/starWars#readme",
   "dependencies": {
     "http": "0.0.0"
+  },
+  "devDependencies": {
+    "http": "0.0.0",
+    "url": "^0.11.0"
   }
 }
