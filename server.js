@@ -1,36 +1,66 @@
-// Here we require/import the HTTP module
+// The url library allows us to parse parts of the request url
+var url = require("url");
 var http = require("http");
 
-// ===========================================================================
+var PORT = 8080;
 
-// Here we define ports we want to listen to
-var PORTONE = 7000;
-var PORTTWO = 7500;
+var server = http.createServer(handleRequest);
 
-//===================================================================
-
-// Here we create two generic functions to handle requests and responses
-function handleRequestOne(request, response) {
-  // The below statement is triggered (client-side) when the user visits the PORT URL
-  //response.end("You're a JavaScript mastermind!");
-  response.end("It Works!! Path Hit: " + request.url);
-}
-
-function handleRequestTwo(request, response) {
-    response.end("You smell.");
-}
-
-// =======================================================================
-// Here we use the Node HTTP package to create our two servers.
-// We then pass it the handleRequest function to empower it with functionality.
-var serverOne = http.createServer(handleRequestOne);
-var serverTwo = http.createServer(handleRequestTwo);
-// Here we start our server so that it can begin listening to client requests.
-serverOne.listen(PORTONE, function() {
-  // The below statement is triggered (server-side) when a user visits the PORT URL
-  console.log("Server listening on: http://localhost:%s", PORTONE);
+// start the server
+server.listen(PORT, function() {
+  console.log("Server Listening on http://localhost:%s", PORT);
 });
 
-serverTwo.listen(PORTTWO, function() {
-    console.log("Server listening on: http://localhost:%s", PORTTWO);
-});
+// we need a function that handles requests and send the response
+function handleRequest(req, res) {
+  // Capturing the url the request is made to
+  var urlParts = url.parse(req.url);
+
+  // When we visit different urls, the swicth statement call on different functions
+
+  switch(urlParts.pathname) {
+    case "/":
+      displayRoot(urlParts.pathname, req, res);
+      break;
+    case "/portfolio":
+      displayPortfolio(urlParts.pathname, req, res);
+      break;
+    case "/edit":
+      console.log("display edit");
+      break;
+    default:
+      display404(urlParts.pathname, req, res);
+  }
+}
+
+function displayRoot(url, req, res) {
+  var myHTML = "<html>";
+  myHTML += "<body><h1>Home Page</h1>";
+  myHTML += "<a href='/portfolio'>Portfolio</a>";
+  myHTML += "</body></html>";
+
+  res.writeHead(200, { "Content-Type": "text/html" });
+
+  res.end(myHTML);
+}
+
+
+function displayPortfolio(url, req, res) {
+  var myHTML = "<html>";
+  myHTML += "<body><h1>My Portfolio</h1>";
+  myHTML += "<a href='/'>Go Home</a>";
+  myHTML += "<body></html>";
+
+  res.writeHead(200, { "Content-Type" : "text/html" });
+  res.end(myHTML);
+
+}
+
+// When we visit any path which is not specifically defined
+function display404(url, req, res) {
+  res.writeHead(404, {
+    "Content-Type": "text/html"
+  });
+  res.write("<h1>404 Not Found </h1>");
+  res.end("The page you were looking for: " + url + " can not be found ");
+}
