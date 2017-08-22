@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/cheetahM/starWars/issues"
   },
-  "homepage": "https://github.com/cheetahM/starWars#readme"
+  "homepage": "https://github.com/cheetahM/starWars#readme",
+  "dependencies": {
+    "http": "0.0.0"
+  }
 }
