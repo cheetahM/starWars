@@ -1,6 +1,7 @@
 // The url library allows us to parse parts of the request url
 var url = require("url");
 var http = require("http");
+var fs = require("fs");
 
 var PORT = 8080;
 
@@ -34,14 +35,19 @@ function handleRequest(req, res) {
 }
 
 function displayRoot(url, req, res) {
-  var myHTML = "<html>";
-  myHTML += "<body><h1>Home Page</h1>";
-  myHTML += "<a href='/portfolio'>Portfolio</a>";
-  myHTML += "</body></html>";
+  // var myHTML = "<html>";
+  // myHTML += "<body><h1>Home Page</h1>";
+  // myHTML += "<a href='/portfolio'>Portfolio</a>";
+  // myHTML += "</body></html>";
 
-  res.writeHead(200, { "Content-Type": "text/html" });
-
-  res.end(myHTML);
+  // Here we use the fs package to read our index.html file
+  fs.readFile(__dirname + "/index.html", function(err, data) {
+    // We then respond to the client with the HTML page by specifically telling the browser that we are delivering
+    // an html file.
+    res.writeHead(200, { "Content-Type": "text/html" });
+    
+    res.end(data);
+  });
 }
 
 
